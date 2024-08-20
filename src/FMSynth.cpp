@@ -3,7 +3,6 @@
 #include <random>
 #include <vector>
 
-
 // #ifndef M_PI
 //     #define M_PI 3.14159265358979323846
 // #endif
@@ -20,8 +19,8 @@ FMSynth::FMSynth(float sample_rate)
     std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<float> dis(0.f, 1.0f);
 
-    std::vector<float> randParams(12);
-    for(size_t i=0; i < synthparams.size(); i++) {
+    std::vector<float> randParams(kN_synthparams);
+    for(size_t i=0; i < kN_synthparams; i++) {
         randParams[i] = dis(gen);
     }  
     mapParameters(randParams);

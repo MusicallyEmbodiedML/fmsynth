@@ -6,6 +6,11 @@
 #include "maximilian.h"
 
 #include <vector>
+#include <array>
+
+
+const size_t kN_synthparams = 14;
+using synthparams_array = std::array<float, kN_synthparams>;
 
 
 class FMOperator {
@@ -31,7 +36,7 @@ class FMSynth {
 
  private:
    FMOperator op1, op2, op3, op4;
-   std::vector<float> synthparams = std::vector<float>(14);
+   synthparams_array synthparams;
    // FMOperator fmops[10];
 
 };
