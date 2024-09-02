@@ -1,28 +1,46 @@
 #include "FMSynth.hpp"
 #include <cmath>
 #include <random>
+#include <cstdlib>
 #include <vector>
+
+extern "C" {
+    #include <stdio.h>
+}
 
 // #ifndef M_PI
 //     #define M_PI 3.14159265358979323846
 // #endif
 
-
-FMSynth::FMSynth(float sample_rate)
+void FMSynth::GenParams(std::vector<float> &param_vector)
 {
-    // w_ = 2.f * M_PI * freq_ / sample_rate_;
-    // phase_ = 0;
-    
-    maxiSettings::setup(sample_rate, 1, 16);  
-
+#if 0
     std::random_device rd;  // Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<float> dis(0.f, 1.0f);
+#else
+    float rand_scale = 1.f / static_cast<float>(RAND_MAX);
+#endif
+    printf("Calling FMSynth::GenParams\n");
+
+    for(size_t i=0; i < kN_synthparams; i++) {
+        param_vector[i] = std::rand() * rand_scale;
+        printf(".");
+    }
+    printf("\n");
+}
+
+FMSynth::FMSynth(float sample_rate)
+{
+    std::srand(0);
+    // w_ = 2.f * M_PI * freq_ / sample_rate_;
+    // phase_ = 0;
+    
+    maxiSettings::setup(sample_rate, 1, 16);
 
     std::vector<float> randParams(kN_synthparams);
-    for(size_t i=0; i < kN_synthparams; i++) {
-        randParams[i] = dis(gen);
-    }  
+    GenParams(randParams);
+
     mapParameters(randParams);
 }
 

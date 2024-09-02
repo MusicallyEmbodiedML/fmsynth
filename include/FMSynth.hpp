@@ -29,6 +29,7 @@ private:
 
 class FMSynth {
  public:
+    static void GenParams(std::vector<float> &param_vector);
     FMSynth(float sample_rate);
     float process();
     int32_t processInt();
