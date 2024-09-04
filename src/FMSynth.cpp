@@ -4,9 +4,9 @@
 #include <cstdlib>
 #include <vector>
 
-extern "C" {
-    #include <stdio.h>
-}
+//extern "C" {
+//    #include <stdio.h>
+//}
 
 // #ifndef M_PI
 //     #define M_PI 3.14159265358979323846
@@ -21,13 +21,13 @@ void FMSynth::GenParams(std::vector<float> &param_vector)
 #else
     float rand_scale = 1.f / static_cast<float>(RAND_MAX);
 #endif
-    printf("Calling FMSynth::GenParams\n");
+    //printf("Calling FMSynth::GenParams\n");
 
     for(size_t i=0; i < kN_synthparams; i++) {
         param_vector[i] = std::rand() * rand_scale;
-        printf(".");
+        //printf(".");
     }
-    printf("\n");
+    //printf("\n");
 }
 
 FMSynth::FMSynth(float sample_rate)
