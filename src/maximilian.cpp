@@ -34,6 +34,9 @@
 #include "maximilian.h"
 #include "math.h"
 #include <iterator>
+extern "C" {
+#include <stdio.h>
+}
 
 // #include <sstream>
 /*  Maximilian can be configured to load ogg vorbis format files using the
@@ -55,6 +58,7 @@ float chandiv= 1;
 maxiSettings::maxiSettings() {}
 
 size_t maxiSettings::sampleRate = 44100;
+float maxiSettings::one_over_sampleRate = 1.f / static_cast<float>(maxiSettings::sampleRate);
 size_t maxiSettings::channels = 2;
 size_t maxiSettings::bufferSize = 1024;
 
@@ -209,6 +213,12 @@ void play(MAXITYPE *channels);//run dac!
 maxiOsc::maxiOsc(){
 	//When you create an oscillator, the constructor sets the phase of the oscillator to 0.
 	phase = 0.0;
+	constant_by_one_over_sr_ = 512.f * maxiSettings::one_over_sampleRate;
+}
+
+void maxiOsc::UpdateParams(void)
+{
+	constant_by_one_over_sr_ = 512.f * maxiSettings::one_over_sampleRate;
 }
 
 MAXITYPE maxiOsc::noise() {
@@ -266,10 +276,12 @@ MAXITYPE maxiOsc::sinebuf4(MAXITYPE frequency) {
 MAXITYPE maxiOsc::sinebuf(MAXITYPE frequency) { //specify the frequency of the oscillator in Hz / cps etc.
 											//This is a sinewave oscillator that uses linear interpolation on a 514 point buffer
 	MAXITYPE remainder;
-	phase += 512./(maxiSettings::sampleRate/(frequency*chandiv));
+	phase += constant_by_one_over_sr_*frequency;
+
 	if ( phase >= 511 ) phase -=512;
-	remainder = phase - floor(phase);
-	output = (MAXITYPE) ((1-remainder) * sineBuffer[1+ (long) phase] + remainder * sineBuffer[2+(long) phase]);
+	size_t phase_int = static_cast<size_t>(phase);
+	remainder = phase - static_cast<MAXITYPE>(phase_int);
+	output = (MAXITYPE) ((1-remainder) * sineBuffer[1+ phase_int] + remainder * sineBuffer[2+phase_int]);
 	return(output);
 }
 

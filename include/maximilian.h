@@ -125,6 +125,7 @@ public:
 
     /*! The sample rate */
     static size_t sampleRate;
+    static float one_over_sampleRate;
     static size_t channels;
     static size_t bufferSize;
     /**
@@ -136,6 +137,7 @@ public:
     static void setup(size_t initSampleRate, size_t initChannels, size_t initBufferSize)
     {
         maxiSettings::sampleRate = initSampleRate;
+        maxiSettings::one_over_sampleRate = 1.f / static_cast<float>(maxiSettings::sampleRate);
         maxiSettings::channels = initChannels;
         maxiSettings::bufferSize = initBufferSize;
     }
@@ -179,9 +181,11 @@ class CHEERP_EXPORT maxiOsc
     MAXITYPE endphase;
     MAXITYPE output;
     MAXITYPE tri;
+    MAXITYPE constant_by_one_over_sr_;
 
 public:
     maxiOsc();
+    void UpdateParams(void);
     /*!Square wave oscillator
     \param frequency in Hz */
     MAXITYPE square(MAXITYPE frequency);

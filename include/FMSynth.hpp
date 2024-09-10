@@ -15,6 +15,10 @@ using synthparams_array = std::array<float, kN_synthparams>;
 
 class FMOperator {
 public:
+    void UpdateParams(void) {
+        carrier.UpdateParams();
+        modulator.UpdateParams();
+    }
     float play(MAXITYPE carrierFreq, MAXITYPE modFreq, MAXITYPE index) {
         float mod = modulator.sinebuf(modFreq);
         float car = carrier.sinebuf(carrierFreq + (mod * index)) ;
