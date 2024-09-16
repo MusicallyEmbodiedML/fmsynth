@@ -30,7 +30,8 @@ void FMSynth::GenParams(std::vector<float> &param_vector)
     //printf("\n");
 }
 
-FMSynth::FMSynth(float sample_rate)
+FMSynth::FMSynth(float sample_rate) :
+    smoother_(100.f, sample_rate)
 {
     std::srand(0);
     // w_ = 2.f * M_PI * freq_ / sample_rate_;
@@ -49,40 +50,54 @@ FMSynth::FMSynth(float sample_rate)
 }
 
 void FMSynth::mapParameters(std::vector<float> &params) {
-    synthparams[0] = 20 + (powf(params[0],2) * 5000);
-    synthparams[1] = 20 + (powf(params[1],2) * 5000);
-    synthparams[2] =  (params[2] * 100);
+    float *params_ptr = params.data();
+    float *dest_ptr = synthparams.data();
+    
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ = (*(params_ptr++) * 100);
 
-    synthparams[3] = 20 + (powf(params[3],2) * 5000);
-    synthparams[4] = 20 + (powf(params[4],2) * 5000);
-    synthparams[5] =  (params[5] * 100);
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ = (*(params_ptr++) * 100);
 
-    synthparams[6] =  (params[6] * 100);
+    *dest_ptr++ = (*(params_ptr++) * 100);
 
-    synthparams[7] = 20 + (powf(params[7],2) * 5000);
-    synthparams[8] = 20 + (powf(params[8],2) * 5000);
-    synthparams[9] =  (params[9] * 100);
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ =  (params[9] * 100);
 
-    synthparams[10] = 20 + (powf(params[10],2) * 5000);
-    synthparams[11] = 20 + (powf(params[11],2) * 5000);
-    synthparams[12] =  (params[12] * 100);
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ = 20 + ((*(params_ptr) * *(params_ptr)) * 5000);
+    ++params_ptr;
+    *dest_ptr++ =  (*(params_ptr++) * 100);
 
-    synthparams[13] =  (params[13] * 100);
+    *dest_ptr++ = (*(params_ptr++) * 100);
 
 
 }
 
 float FMSynth::process()
 {
+    // Smooth all parameters before using them
+    smoother_.Process(synthparams.data(), synthparams_smoothed.data());
+
 #if 1
-    float w = op1.play(synthparams[0] + 
-        (op2.play(synthparams[3],synthparams[4],synthparams[5]) * synthparams[6]),
-        synthparams[1], synthparams[2]);
+    float w = op1.play(synthparams_smoothed[0] + 
+        (op2.play(synthparams_smoothed[3],synthparams_smoothed[4],synthparams_smoothed[5]) * synthparams_smoothed[6]),
+        synthparams_smoothed[1], synthparams_smoothed[2]);
 #endif
 #if 1
-    float w2 = op3.play(synthparams[7] + 
-        (op4.play(synthparams[10],synthparams[11],synthparams[12]) * synthparams[13]),
-        synthparams[8], synthparams[9]);
+    float w2 = op3.play(synthparams_smoothed[7] + 
+        (op4.play(synthparams_smoothed[10],synthparams_smoothed[11],synthparams_smoothed[12]) * synthparams_smoothed[13]),
+        synthparams_smoothed[8], synthparams_smoothed[9]);
     // float w2 = op3.play(220 + (op4.play(231,111,5) * 40),20,50);
     return w + w2;
 #endif
