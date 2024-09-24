@@ -268,28 +268,32 @@ public:
 // };
 
 
-// /**
-//  * \class A delay line
-//  */
-// class CHEERP_EXPORT maxiDelayline
-// {
-//     MAXITYPE frequency;
-//     int phase;
-//     MAXITYPE startphase;
-//     MAXITYPE endphase;
-//     MAXITYPE output;
-//     MAXITYPE memory[88200 * 8];
+/**
+ * \class A delay line
+ */
+class CHEERP_EXPORT maxiDelayline
+{
 
-// public:
-//     maxiDelayline();
-//     /*! Apply a delay to a signal \param input a signal, \param size the size of the delay in samples \param feedback the amount of feedback*/
-//     MAXITYPE dl(MAXITYPE input, int size, MAXITYPE feedback);
-//     /** Apply a delay to a signal, reading from a specific position in the buffer 
-//      * \param input a signal, \param size the size of the delay in samples \param feedback the amount of feedback
-//      * \param position the position in the buffer (in samples)
-//      * */
-//     MAXITYPE dlFromPosition(MAXITYPE input, int size, MAXITYPE feedback, int position); //renamed to avoid overrides
-// };
+public:
+    maxiDelayline();
+    /*! Apply a delay to a signal \param input a signal, \param size the size of the delay in samples \param feedback the amount of feedback*/
+    MAXITYPE dl(MAXITYPE input, int size, MAXITYPE feedback);
+    /** Apply a delay to a signal, reading from a specific position in the buffer 
+     * \param input a signal, \param size the size of the delay in samples \param feedback the amount of feedback
+     * \param position the position in the buffer (in samples)
+     * */
+    MAXITYPE dlFromPosition(MAXITYPE input, int size, MAXITYPE feedback, int position); //renamed to avoid overrides
+
+    static const unsigned int kDl_max_length = 48000;
+
+ protected:
+    MAXITYPE frequency;
+    int phase;
+    MAXITYPE startphase;
+    MAXITYPE endphase;
+    MAXITYPE output;
+    MAXITYPE memory[kDl_max_length];
+};
 
 // /**
 // * A selection of filters
