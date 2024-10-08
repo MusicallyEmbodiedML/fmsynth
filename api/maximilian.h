@@ -175,12 +175,12 @@ public:
 class CHEERP_EXPORT maxiOsc
 {
 
-    MAXITYPE frequency;
+    //MAXITYPE frequency;
     MAXITYPE phase;
-    MAXITYPE startphase;
-    MAXITYPE endphase;
+    //MAXITYPE startphase;
+    //MAXITYPE endphase;
     MAXITYPE output;
-    MAXITYPE tri;
+    //MAXITYPE tri;
     MAXITYPE constant_by_one_over_sr_;
 
 public:

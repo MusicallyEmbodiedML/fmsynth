@@ -18,6 +18,9 @@ class EuclideanSeq {
     bool Process(float phasor);
     void SetParams(params p);
     void MapNNParams(std::vector<float> nn_params);
+    inline float Probe(size_t probe_n) {
+        return probes_[probe_n];
+    }
 
  protected:
 
@@ -25,7 +28,8 @@ class EuclideanSeq {
     bool is_init_;
     params params_;
     float offset_;
-
+    static constexpr size_t n_probes_ = 2;
+    float probes_[n_probes_];
 };
 
 

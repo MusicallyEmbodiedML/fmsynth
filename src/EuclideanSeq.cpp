@@ -8,7 +8,8 @@ extern "C" {
 
 EuclideanSeq::EuclideanSeq() :
     is_init_(0),
-    params_{ 0 }
+    params_{ 0 },
+    probes_{ 0 }
 {
 }
 
@@ -23,7 +24,7 @@ bool EuclideanSeq::Process(float phasor)
         while (phasor >= 1){
             phasor -= 1;
         }
-        
+        probes_[0] = phasor;
 
         // NOTE: Phasor is the last arg
         const float fi         = phasor * params_.n;
@@ -34,6 +35,7 @@ bool EuclideanSeq::Process(float phasor)
             i--;
         }
         const int idx = ((i + params_.n) * params_.k) % params_.n;
+        probes_[1] = idx;
         result        = static_cast<bool>(idx < params_.k && rem < pulse_width_ ? 1 : 0);
     
     }
@@ -77,6 +79,8 @@ void EuclideanSeq::SetParams(params p)
     params_ = p;
     offset_ = static_cast<float>(p.offset_n) /
               static_cast<float>(p.offset_d);
+
+    is_init_ = true;
 }
 
 
