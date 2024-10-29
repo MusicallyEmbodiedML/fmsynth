@@ -126,6 +126,9 @@ int EuclideanSeq::MakeN_(float param)
 int EuclideanSeq::MakeMul_(float param) {
     static std::vector<int> mul_lookup{ 1, 2, 4 };
 
+    // Law multiplier like x^3
+    param = param * param * param;
+
     float n = param * mul_lookup.size();
     n = std::floor(n);
     while (n >= mul_lookup.size()) {
