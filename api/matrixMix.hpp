@@ -90,7 +90,7 @@ public:
 
 private:
     std::array<float, N*N> mixingMatrix;
-    float directFeedbackScale = 0.f;
+    float directFeedbackScale = 0.1f;
     float scale=1;
     
 };
@@ -128,14 +128,14 @@ public:
         // return x;
         mmix.set(params);
         const size_t ofs = NFX*NFX; //offset from mixer params
-        fxInputs[0] = x * params[ofs+0];
-        fxInputs[1] = x * params[ofs+1];
-        fxInputs[2] = x * params[ofs+2];
-        fxInputs[3] = x * params[ofs+3];
+        fxInputs[0] = x * params[ofs+0] * params[ofs+0];
+        fxInputs[1] = x * params[ofs+1] * params[ofs+1];
+        fxInputs[2] = x * params[ofs+2] * params[ofs+2];
+        fxInputs[3] = x * params[ofs+3] * params[ofs+3];
 
 
-        float flangeInput = (mmix.calculateMix(fxOutputs, 0) + fxInputs[0]) * 0.5;
-        float flange = flanger.flange(flangeInput, params[ofs+4] * 6000 + 100, params[ofs+5] * 0.97, params[ofs+6] * 0.99f, params[ofs+7]);
+        float flangeInput = (mmix.calculateMix(fxOutputs, 0) + fxInputs[0]);
+        float flange = flanger.flange(flangeInput, params[ofs+4] * 10000 + 100, params[ofs+5] * 0.99, params[ofs+6] * 0.99f, params[ofs+7]);
 
         // // float distInput = (mmix.calculateMix(fxOutputs, 1) + fxInputs[1]) * 0.5;
         // // float dist = distortion.fastAtanDist(distInput, params[ofs+8] * 2);
