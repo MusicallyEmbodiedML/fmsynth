@@ -93,25 +93,15 @@ float FMSynth::process()
     float w = op1.play(synthparams_smoothed[0] + 
         (op2.play(synthparams_smoothed[3],synthparams_smoothed[4],synthparams_smoothed[5]) * synthparams_smoothed[6]),
         synthparams_smoothed[1], synthparams_smoothed[2]);
-#endif
-#if 1
+
     float w2 = op3.play(synthparams_smoothed[7] + 
         (op4.play(synthparams_smoothed[10],synthparams_smoothed[11],synthparams_smoothed[12]) * synthparams_smoothed[13]),
         synthparams_smoothed[8], synthparams_smoothed[9]);
     // float w2 = op3.play(220 + (op4.play(231,111,5) * 40),20,50);
     return w + w2;
+#else
+    return op1.play(440.f, 0, 0);
 #endif
-    // float w=0;
-    // for(size_t i=0; i < 10; i++) {
-    //     w += fmops[i].play(200 + i, 200+i, 2 + i);
-    // }
-    // return w/10.0;
-    // float y = std::sin(phase_);
-    // phase_ += w_;
-    // if (phase_ > 2 * M_PI) {
-    //     phase_ -= 2 * M_PI;
-    // }
-    // return y;
 }
 
 int32_t FMSynth::processInt()
