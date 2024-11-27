@@ -133,6 +133,7 @@ class FMSynth {
 
     // MIDI
     // RingBuffer<ts_midi_note, kN_notes> note_buffer_;
+    OnePoleSmoother<1> envelope_smoother_;
     float note_freq_;
     float note_amplitude_;
     bool play_note_;

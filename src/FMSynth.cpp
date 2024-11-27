@@ -32,6 +32,7 @@ void FMSynth::GenParams(std::vector<float> &param_vector)
 
 FMSynth::FMSynth(float sample_rate) :
     smoother_(100.f, sample_rate),
+    envelope_smoother_(10.f, sample_rate),
     note_freq_(0),
     note_amplitude_(0),
     play_note_(false),
@@ -122,6 +123,10 @@ float FMSynth::process()
             // One note to play!
             envelope = note_amplitude_;
         }
+        // Smooth envelope
+        float envelope_smoothed;
+        envelope_smoother_.Process(&envelope, &envelope_smoothed);
+        envelope = envelope_smoothed;
     } else {
         carrier_1 = synthparams_smoothed[0];
         carrier_2 = synthparams_smoothed[7];
