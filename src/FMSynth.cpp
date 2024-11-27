@@ -104,7 +104,7 @@ float FMSynth::process()
     smoother_.Process(synthparams.data(), synthparams_smoothed.data());
 
     float carrier_1, carrier_2, envelope;
-#if 0
+#if 1
     // Handle MIDI
     if (midi_enabled_) {
         ts_midi_note *last_note_ptr = note_buffer_.back();
@@ -131,19 +131,20 @@ float FMSynth::process()
     }
 #endif
 
-#if 0
+#if 1
     float w = op1.play(carrier_1 + 
         (op2.play(synthparams_smoothed[3],synthparams_smoothed[4],synthparams_smoothed[5]) * synthparams_smoothed[6]),
         synthparams_smoothed[1], synthparams_smoothed[2]);
 #endif
-#if 0
+#if 1
     float w2 = op3.play(carrier_2 + 
         (op4.play(synthparams_smoothed[10],synthparams_smoothed[11],synthparams_smoothed[12]) * synthparams_smoothed[13]),
         synthparams_smoothed[8], synthparams_smoothed[9]);
     // float w2 = op3.play(220 + (op4.play(231,111,5) * 40),20,50);
-    //return (w + w2) * envelope;
+    return (w + w2) * envelope;
 #endif
 
+#if 0
     carrier_1 = 440.f;
     envelope = 0.2;
     static float phase_ = 0;
@@ -154,6 +155,7 @@ float FMSynth::process()
         phase_ -= 1;
     }
     return y * envelope;
+#endif
 }
 
 int32_t FMSynth::processInt()
