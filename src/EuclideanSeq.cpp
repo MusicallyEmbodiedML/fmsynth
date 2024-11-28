@@ -55,8 +55,7 @@ bool EuclideanSeq::Process(float phasor)
         }
         const int idx = ((i + params_.n) * params_.k) % params_.n;
         probes_[1] = idx;
-        result        = static_cast<bool>(idx < params_.k && rem < pulse_width_ ? 1 : 0);
-    
+        result = static_cast<bool>(idx < params_.k && rem < pulse_width_ ? 1 : 0);
     }
 
     return result;

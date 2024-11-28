@@ -8,6 +8,7 @@ class Phasor {
     Phasor(float sample_rate);
     float Process();
     void SetF0(float f0);
+    static bool ToPulse(float ph, float width = 0.4);
 
  protected:
     const float fs_;

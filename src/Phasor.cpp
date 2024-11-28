@@ -22,3 +22,12 @@ void Phasor::SetF0(float f0)
     increment_ = f0 / fs_;
     wraparound_ = 1;
 }
+
+bool Phasor::ToPulse(float ph, float width)
+{
+    if (ph <= width) {
+        return true;
+    } else {
+        return false;
+    }
+}
